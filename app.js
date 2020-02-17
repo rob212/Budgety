@@ -64,7 +64,9 @@ var UIController = (function() {
         inputType: '.add__type',
         inputDescription: '.add__description',
         inputValue: '.add__value',
-        enterKeyCode: 13
+        enterKeyCode: 13,
+        incomeList: '.income__list',
+        expenseList: '.expenses__list'
     }
 
    
@@ -75,6 +77,42 @@ var UIController = (function() {
                 description: document.querySelector(DOM_STRINGS.inputDescription).value,
                 value: document.querySelector(DOM_STRINGS.inputValue).value
             };
+        },
+
+        addListItem: function(item, type) {
+            var htmlTemplate, newHTML;
+
+            // Create HTML string with placeholder text
+            if(type === 'inc') {
+                htmlTemplate = '<div class="item clearfix" id="income-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
+            } else if(type === 'exp') {
+                htmlTemplate = '<div class="item clearfix" id="expense-%id%"><div class="item__description">%description%</div><div class="right clearfix"><div class="item__value">%value%</div><div class="item__percentage">21%</div><div class="item__delete"><button class="item__delete--btn"><i class="ion-ios-close-outline"></i></button></div></div></div>';
+            }
+
+            // Replace placeholder text with some actual data
+            newHTML = htmlTemplate.replace('%id%', item.id);
+            newHTML = newHTML.replace('%description%', item.description);
+            newHTML = newHTML.replace('%value%', item.value);
+
+            // Insert the HTML into the DOM
+            var d1 = document.querySelector(type === 'inc' ? DOM_STRINGS.incomeList: DOM_STRINGS.expenseList);
+            d1.insertAdjacentHTML('beforeend', newHTML);
+        },
+
+        clearFields: function() {
+            var fields, fieldsArray;
+            // this creates a list of strings rather than an array of strings
+            fields = document.querySelectorAll(DOM_STRINGS.inputDescription + ', ' + DOM_STRINGS.inputValue);
+
+            // We borrow the slice method of the Array prototype passing it a list and it successfully converts that to an array of strings
+            fieldsArray = Array.prototype.slice.call(fields);
+
+            // Clear all the fields
+            fieldsArray.forEach(function(current, index, array) {
+                current.value = "";
+            });
+
+            fieldsArray[0].focus();
         },
 
         getDOMStrings: function() {
@@ -111,10 +149,14 @@ var controller = (function(budgetCtrl, UICtrl) {
         newItem = budgetCtrl.addItem(input.type, input.description, input.value);
 
         // 3. Add the item to the UI
+        UICtrl.addListItem(newItem, input.type);
 
-        // 4. Calculate the budget
+        // 4. Clear the current UI fields
+        UICtrl.clearFields();
 
-        // 5. Display the budget in the UI
+        // 5. Calculate the budget
+
+        // 6. Display the budget in the UI
         console.log(input);
     };
 
