@@ -102,7 +102,12 @@ var UIController = (function() {
         inputValue: '.add__value',
         enterKeyCode: 13,
         incomeList: '.income__list',
-        expenseList: '.expenses__list'
+        expenseList: '.expenses__list',
+        budgetLabel: '.budget__value',
+        incomeLabel: '.budget__income--value',
+        expensesLabel: '.budget__expenses--value',
+        percentageLabel: '.budget__expenses--percentage'
+
     }
 
    
@@ -153,6 +158,14 @@ var UIController = (function() {
 
         getDOMStrings: function() {
             return DOM_STRINGS;
+        },
+
+        displayBudget: function(obj) {
+            document.querySelector(DOM_STRINGS.budgetLabel).textContent = obj.budget;
+            document.querySelector(DOM_STRINGS.incomeLabel).textContent = obj.totalIncome;
+            document.querySelector(DOM_STRINGS.expensesLabel).textContent = obj.totalExpenses;
+            var percentageLabel = obj.percentage <= 0 ? '---' : obj.percentage + '%';
+            document.querySelector(DOM_STRINGS.percentageLabel).textContent = percentageLabel;
         }
 
     };
@@ -185,7 +198,7 @@ var controller = (function(budgetCtrl, UICtrl) {
 
 
         // 3. Display the budget in the UI
-        console.log(budget);
+        UICtrl.displayBudget(budget);
         
     };
 
@@ -212,6 +225,12 @@ var controller = (function(budgetCtrl, UICtrl) {
     return {
         init: function() {
             console.log('The application has started.')
+            UICtrl.displayBudget({
+                budget: 0,
+                totalIncome: 0,
+                totalExpenses: 0,
+                percentage: -1
+            });
             setupEventListeners();
         }
     };
