@@ -174,7 +174,7 @@ var UIController = (function() {
 })();
 
 
-// GLOBAL APP CONTROLLER
+// APP CONTROLLER
 var controller = (function(budgetCtrl, UICtrl) {
 
     var setupEventListeners = function() {
