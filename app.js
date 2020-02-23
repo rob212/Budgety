@@ -63,7 +63,7 @@ var budgetController = (function() {
 
         deleteItem: function(type, id) {
             var ids, index;
-            console.log('I am in the deleteItem and going to delete type: ' + type + ', ID: ' + id);
+        
             ids = data.allItems[type].map(function(current) {
                 return current.id;
             });
@@ -71,7 +71,7 @@ var budgetController = (function() {
             if(index !== -1) {
                 data.allItems[type].splice(index, 1);
             }
-            console.log(data);
+            
         },
 
         calculateBudget: function() {
@@ -152,6 +152,11 @@ var UIController = (function() {
             // Insert the HTML into the DOM
             var d1 = document.querySelector(type === 'inc' ? DOM_STRINGS.incomeList: DOM_STRINGS.expenseList);
             d1.insertAdjacentHTML('beforeend', newHTML);
+        },
+
+        deleteListItem: function(selectorId) {
+            var el = document.getElementById(selectorId);
+            el.parentNode.removeChild(el);
         },
 
         clearFields: function() {
@@ -254,8 +259,10 @@ var controller = (function(budgetCtrl, UICtrl) {
             budgetCtrl.deleteItem(type, ID);
 
             // 2. Delete the item from the UI
+            UICtrl.deleteListItem(itemId);
 
             // 3. Update and show the new budget
+            updateBudget();
         };
     };
 
